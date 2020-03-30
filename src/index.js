@@ -1,12 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import App from '../src/components/App';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import rootReducer from './reducers';
+import thunk from 'redux-thunk';
 import * as serviceWorker from './serviceWorker';
+import { fetchMemes } from './actions';
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+store.subscribe(() => console.log('store', store.getState()));
+store.dispatch(fetchMemes());
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
